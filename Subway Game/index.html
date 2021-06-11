@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Game</title>
+	<style type="text/css">
+		#canvas{
+			height: 500px;
+			width: 800px;
+			border: solid black;
+		}
+		button{
+			height: 100px;
+			width: 100px;
+		}
+	</style>
+</head>
+<body>
+	<h1 align="center">Simple Game!</h1>
+	<canvas id="canvas"></canvas>
+	<br>
+	<button id="up" onclick="btnP()">Up</button>
+	<button id="Down" onclick="btnD()">Down</button>
+</br>
+	<script type="text/javascript" src="app.js">
+		//Set Up Variable {System}
+let $ = document;
+let canvas = $.querySelector('#canvas');
+canvas.width = canvas.scrollWidth;
+canvas.height = canvas.scrollHeight;
+let cW = canvas.width;
+let cH = canvas.height;
+let c = canvas.getContext('2d');
+let bup = $.querySelector('#up')
+let bdown = $.querySelector('#down')
+//Set Up variable {In game}
+let fps = 1000/60;
+let p1 = {x:0,y:cH/2-50,w:100,h:100,c:'red',summon:()=>{
+	c.fillStyle = p1.c;
+	c.fillRect(p1.x,p1.y,p1.w,p1.h);
+	c.fill()
+}}
+let p2 = {x:cW-100,y:cH/2-50,w:100,h:100,c:'black',summon:()=>{
+	c.fillStyle = p2.c;
+	c.fillRect(p2.x,p2.y,p2.w,p2.h);
+	c.fill()
+}}
+//Score
+let score = 0;
+//Movement
+let key = {
+	up:38,
+	down:40,
+	left:37,
+	right:39
+}
+//Collision
+
+//Drawing
+draw()
+function draw(){
+	c.clearRect(0,0,cW,cH);
+	c.beginPath();
+	p1.summon();
+	p2.summon();
+	c.font = '30px arial'
+	c.fillText('Score:'+score,0,50)
+	collision();
+	// p2.x-=5
+	// score++
+	window.onkeydown = move
+}
+setInterval(draw,fps)
+function move(e){
+	if(e.keyCode==key.down){
+		p1.y+=100
+	}
+	else if(e.keyCode==key.up){
+		p1.y-=100
+	}
+}
+score++
+function collision(){
+	if(p1.y<0){
+		p1.y=0
+	}
+	if(p1.y+100>cH){
+		p1.y=cH-100
+	}
+	if(p2.x<0){
+		p2.x=cW-100;
+		p2.y=Math.floor(Math.random()*400)
+	}
+	if(p1.x+100>p2.x && p1.y+100>p2.y && p1.y<p2.y+100){
+		alert('You Lose...Try Again Later Or Click Refresh' +' '+ 'You Score:'+score)
+		p2.x=cW-100;
+		p2.y=cH/2-50;
+		score=0;
+		p2.x-=5
+	}
+	if(score>100){
+	 	p2.x-=6
+	}
+	if(score>100*2){
+	 	p2.x-=7
+	}
+	if(score>100*3){
+	 	p2.x-=8
+	}
+	if(score>100*4){
+	 	p2.x-=9
+	}
+	if(score>100*5){
+	 	p2.x-=10
+	}
+}
+function btnP(){
+	p1.y-=100
+}
+function btnD(){
+	p1.y+=100
+}
+	</script>
+</body>
+</html>
